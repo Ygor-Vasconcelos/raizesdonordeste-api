@@ -10,7 +10,6 @@ API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidade
 Projeto backend desenvolvido em Node.js com Express, Prisma ORM e PostgreSQL.
 
 ## Tecnologias Utilizadas
->>>>>>> 9b9b29aeee1f5fe07e3706e00e709745e038def7
 
 - Node.js
 - Express
@@ -30,9 +29,8 @@ Projeto backend desenvolvido em Node.js com Express, Prisma ORM e PostgreSQL.
 |---|---|
 | Node.js | v20.x |
 | NPM | 10.x |
-| PostgreSQL | 16.x |
-| Prisma ORM | 6.x |
-
+| PostgreSQL 
+| Prisma ORM 
 ---
 
 # Pré-requisitos
@@ -127,10 +125,7 @@ Para acessar endpoints protegidos:
 3. Clique em `Authorize` no Swagger
 4. Informe:
 
-```bash
-Bearer SEU_TOKEN
-```
-
+SEU_TOKEN
 ---
 
 # Funcionalidades
