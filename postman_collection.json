@@ -1,0 +1,375 @@
+{
+  "info": {
+    "_postman_id": "d1916b87-8f0a-4c02-81bc-79fee3863277",
+    "name": "API Raizes do Nordeste",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55058074",
+    "_collection_link": "https://go.postman.co/collection/55058074-d1916b87-8f0a-4c02-81bc-79fee3863277?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"admin@email.com\",\r\n  \"senha\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Administrador\",\r\n  \"email\": \"admin@email.com\",\r\n  \"senha\": \"123456\",\r\n  \"role\": \"ADMIN\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/auth/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Produtos",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/produtos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Produto",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Carne de Sol\",\r\n  \"preco\": 45.90\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/produtos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "produtos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Unidades",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/unidades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "unidades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Unidade",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Unidade Recife\",\r\n  \"cidade\": \"Recife\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/unidades",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "unidades"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Estoque",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/estoque",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "estoque"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Estoque",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"unidadeId\": 1,\r\n  \"produtoId\": 1,\r\n  \"quantidade\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/estoque",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "estoque"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Listar Pedidos",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pedidos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar Pedido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"unidadeId\": 1,\r\n  \"canalPedido\": \"APP\",\r\n  \"metodoPagamento\": \"PIX\",\r\n  \"itens\": [\r\n    {\r\n      \"produtoId\": 1,\r\n      \"quantidade\": 2\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pedidos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Teste Estoque Insuficiente",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzc5NDE1NTc3LCJleHAiOjE3Nzk1MDE5Nzd9.nrvecjIC3TpuVpBkIiRTC_7ob9zHAbGRnwCkqlNX894",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"unidadeId\": 1,\r\n  \"canalPedido\": \"APP\",\r\n  \"metodoPagamento\": \"PIX\",\r\n  \"itens\": [\r\n    {\r\n      \"produtoId\": 1,\r\n      \"quantidade\": 999\r\n    }\r\n  ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "pedidos"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
