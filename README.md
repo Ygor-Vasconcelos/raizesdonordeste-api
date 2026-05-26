@@ -1,16 +1,23 @@
 # API Raízes do Nordeste
 
+<<<<<<< HEAD
 API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidades de uma rede de restaurantes, utilizando autenticação JWT e documentação Swagger.
 
 ---
 
 # Tecnologias Utilizadas
+=======
+Projeto backend desenvolvido em Node.js com Express, Prisma ORM e PostgreSQL.
+
+## Tecnologias Utilizadas
+>>>>>>> 9b9b29aeee1f5fe07e3706e00e709745e038def7
 
 - Node.js
 - Express
 - PostgreSQL
 - Prisma ORM
 - JWT
+<<<<<<< HEAD
 - BcryptJS
 - Swagger/OpenAPI
 - Nodemon
@@ -329,3 +336,33 @@ A API utiliza respostas padronizadas utilizando códigos HTTP apropriados:
 # Integrantes
 
 - Ygor Vasconcelos
+=======
+- Swagger
+- bcrypt
+
+---
+
+## Funcionalidades
+
+- Cadastro de usuários
+- Login com JWT
+- Controle de permissões
+- Cadastro de produtos
+- Controle de estoque
+- Cadastro de unidades
+- Criação de pedidos
+- Simulação de pagamento
+- Logs de auditoria
+- Swagger Documentation
+
+---
+
+## Instalação
+
+Clone o projeto:
+
+```bash
+git clone https://github.com/Ygor-Vasconcelos/raizes-do-nordeste-api
+
+## Projeto multidisciplinar
+>>>>>>> 9b9b29aeee1f5fe07e3706e00e709745e038def7
