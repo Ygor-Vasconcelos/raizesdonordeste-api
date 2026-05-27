@@ -32,14 +32,16 @@ enum StatusPedido {
 }
 
 model Usuario {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  email     String   @unique
-  senha     String
-  role      Role
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  nome        String
+  email       String   @unique
+  senha       String
+  role        Role
+  createdAt   DateTime @default(now())
 
-  pedidos Pedido[]
+  pedidos     Pedido[]
+  logs        LogAuditoria[]
+  fidelidade  Fidelidade?
 }
 
 model Unidade {
@@ -73,16 +75,16 @@ model Estoque {
 }
 
 model Pedido {
-  id            Int            @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   usuarioId     Int
   unidadeId     Int
   canalPedido   CanalPedido
   status        StatusPedido @default(AGUARDANDO_PAGAMENTO)
   total         Float
-  createdAt     DateTime       @default(now())
+  createdAt     DateTime      @default(now())
 
-  usuario        Usuario        @relation(fields: [usuarioId], references: [id])
-  unidade        Unidade        @relation(fields: [unidadeId], references: [id])
+  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
+  unidade        Unidade      @relation(fields: [unidadeId], references: [id])
   itens          ItemPedido[]
   pagamento      Pagamento?
 }
@@ -110,9 +112,22 @@ model Pagamento {
   pedido Pedido @relation(fields: [pedidoId], references: [id])
 }
 
+model Fidelidade {
+  id        Int @id @default(autoincrement())
+  pontos    Int @default(0)
+
+  usuarioId Int @unique
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+}
+
 model LogAuditoria {
   id        Int @id @default(autoincrement())
   acao      String
   entidade  String
   createdAt DateTime @default(now())
+
+  usuarioId Int?
+
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
 }

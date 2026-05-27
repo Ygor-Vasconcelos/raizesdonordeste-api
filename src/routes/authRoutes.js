@@ -33,9 +33,6 @@ const router = express.Router()
  *               senha:
  *                 type: string
  *                 example: 123456
- *               role:
- *                 type: string
- *                 example: ADMIN
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso

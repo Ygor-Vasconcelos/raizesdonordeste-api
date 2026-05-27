@@ -8,7 +8,7 @@ const produtoRoutes = require('./routes/produtoRoutes')
 const unidadeRoutes = require('./routes/unidadeRoutes')
 const estoqueRoutes = require('./routes/estoqueRoutes')
 const pedidoRoutes = require('./routes/pedidoRoutes')
-
+const fidelidadeRoutes = require('./routes/fidelidadeRoutes')
 const { swaggerUi, specs } = require('./docs/swagger')
 
 const app = express()
@@ -23,6 +23,7 @@ app.use('/produtos', produtoRoutes)
 app.use('/unidades', unidadeRoutes)
 app.use('/estoque', estoqueRoutes)
 app.use('/pedidos', pedidoRoutes)
+app.use('/fidelidade', fidelidadeRoutes)
 
 app.get('/', (req, res) => {
   return res.json({

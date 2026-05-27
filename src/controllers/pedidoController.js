@@ -126,37 +126,48 @@ class PedidoController {
       }
 
       // Criação do pedido e seus itens
-      const pedido = await prisma.pedido.create({
-        data: {
-          usuarioId,
-          unidadeId,
-          canalPedido,
-          total,
-          itens: {
-            create: await Promise.all(
-              itens.map(async item => {
+    const pedido = await prisma.pedido.create({
+  data: {
+    usuarioId,
+    unidadeId,
+    canalPedido,
+    total,
+    itens: {
+      create: await Promise.all(
+        itens.map(async item => {
 
-                const produto = await prisma.produto.findUnique({
-                  where: {
-                    id: item.produtoId
-                  }
-                })
+          const produto = await prisma.produto.findUnique({
+            where: {
+              id: item.produtoId
+            }
+          })
 
-                return {
-                  produtoId: item.produtoId,
-                  quantidade: item.quantidade,
-                  precoUnit: produto.preco
-                }
-
-              })
-            )
+          return {
+            produtoId: item.produtoId,
+            quantidade: item.quantidade,
+            precoUnit: produto.preco
           }
-        },
-        include: {
-          itens: true
-        }
-      })
 
+        })
+      )
+    }
+  },
+  include: {
+    itens: true
+  }
+})
+
+await prisma.fidelidade.update({
+  where: {
+    usuarioId
+  },
+
+  data: {
+    pontos: {
+      increment: 10
+    }
+  }
+})
       // Simulação de integração com gateway de pagamento
       const pagamentoAprovado = Math.random() > 0.3
 

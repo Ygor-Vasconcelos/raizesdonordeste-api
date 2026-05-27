@@ -11,8 +11,7 @@ class AuthController {
       const {
         nome,
         email,
-        senha,
-        role
+        senha
       } = req.body
 
       const usuarioExiste = await prisma.usuario.findUnique({
@@ -32,12 +31,21 @@ class AuthController {
 
       const usuario = await prisma.usuario.create({
         data: {
-          nome,
-          email,
-          senha: senhaHash,
-          role: role || 'CLIENTE'
-        }
-      })
+         nome,
+         email,
+         senha: senhaHash,
+         role: 'CLIENTE',
+
+         fidelidade: {
+           create: {
+        pontos: 0
+      }
+    }
+  },
+  include: {
+    fidelidade: true
+  }
+})
 
       return res.status(201).json({
         id: usuario.id,

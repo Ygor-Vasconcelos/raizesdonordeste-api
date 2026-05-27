@@ -127,15 +127,9 @@ Para acessar endpoints protegidos:
 3. Clique em `Authorize` no Swagger
 4. Informe:
 
-<<<<<<< HEAD
 ```txt
     SEU_TOKEN
 ```
-
-=======
-SEU_TOKEN
->>>>>>> 60feaaefd00c8b147e303bb31d33ab05a4d3861b
----
 
 # Funcionalidades
 
@@ -185,6 +179,10 @@ SEU_TOKEN
 - Atualização automática do status do pedido
 
 ---
+
+# Programa de Fidelidade
+
+O sistema possui estrutura preparada para fidelização de clientes através de acúmulo de pontos por pedidos realizados, permitindo futuras expansões para resgate de benefícios e descontos.
 
 # Controle de Permissões
 
