@@ -1,23 +1,20 @@
 # API Raízes do Nordeste
 
-<<<<<<< HEAD
-API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidades de uma rede de restaurantes, utilizando autenticação JWT e documentação Swagger.
+API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidades de uma rede de restaurantes multicanal, utilizando autenticação JWT, Prisma ORM e documentação Swagger.
 
 ---
 
 # Tecnologias Utilizadas
-=======
+
 Projeto backend desenvolvido em Node.js com Express, Prisma ORM e PostgreSQL.
 
-## Tecnologias Utilizadas
->>>>>>> 9b9b29aeee1f5fe07e3706e00e709745e038def7
+## Stack Principal
 
 - Node.js
 - Express
 - PostgreSQL
 - Prisma ORM
 - JWT
-<<<<<<< HEAD
 - BcryptJS
 - Swagger/OpenAPI
 - Nodemon
@@ -26,8 +23,6 @@ Projeto backend desenvolvido em Node.js com Express, Prisma ORM e PostgreSQL.
 
 # Ambiente Utilizado
 
-| Tecnologia | Versão |
-|---|---|
 | Node.js | v20.x |
 | NPM | 10.x |
 | PostgreSQL | 16.x |
@@ -49,7 +44,7 @@ Antes de executar o projeto, é necessário possuir instalado:
 # Clonando o Repositório
 
 ```bash
-git clone LINK_DO_REPOSITORIO
+git clone https://github.com/Ygor-Vasconcelos/raizesdonordeste-api
 
 cd raizes-do-nordeste-api
 ```
@@ -66,15 +61,23 @@ npm install
 
 # Configuração do .env
 
-Crie um arquivo `.env` na raiz do projeto:
+Utilize o arquivo `.env.example` como base para criar o arquivo `.env`.
 
-```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/raizes"
-JWT_SECRET="sua_chave_jwt"
-PORT=3000
+Exemplo:
+
+```bash
+cp .env.example .env
 ```
 
----
+Depois preencha as variáveis corretamente:
+
+```env
+DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/raizes_nordeste"
+
+JWT_SECRET="sua_chave_jwt"
+
+PORT=3000
+```
 
 # Banco de Dados
 
@@ -83,8 +86,6 @@ PORT=3000
 ```bash
 npx prisma migrate dev
 ```
-
----
 
 ## Gerar Prisma Client
 
@@ -100,9 +101,9 @@ npx prisma generate
 npm run dev
 ```
 
-Servidor:
+Servidor local:
 
-```bash
+```txt
 http://localhost:3000
 ```
 
@@ -112,7 +113,7 @@ http://localhost:3000
 
 A documentação da API estará disponível em:
 
-```bash
+```txt
 http://localhost:3000/docs
 ```
 
@@ -127,8 +128,8 @@ Para acessar endpoints protegidos:
 3. Clique em `Authorize` no Swagger
 4. Informe:
 
-```bash
-Bearer SEU_TOKEN
+```txt
+    SEU_TOKEN
 ```
 
 ---
@@ -141,15 +142,11 @@ Bearer SEU_TOKEN
 - Login com JWT
 - Hash de senha com Bcrypt
 
----
-
 ## Produtos
 
 - Cadastro de produtos
 - Listagem de produtos
 - Validação de dados
-
----
 
 ## Unidades
 
@@ -157,15 +154,11 @@ Bearer SEU_TOKEN
 - Controle por cidade
 - Listagem de unidades
 
----
-
 ## Estoque
 
 - Controle de estoque por unidade
 - Atualização automática após pedidos
 - Validação de estoque insuficiente
-
----
 
 ## Pedidos
 
@@ -182,8 +175,6 @@ Bearer SEU_TOKEN
 - BALCAO
 - PICKUP
 - WEB
-
----
 
 ## Pagamento Mockado
 
@@ -202,8 +193,6 @@ Pode:
 - cadastrar unidades
 - alterar status de pedidos
 
----
-
 ## CLIENTE
 
 Pode:
@@ -214,9 +203,34 @@ Pode:
 
 ---
 
+# Segurança e LGPD
+
+A aplicação implementa mecanismos básicos de segurança e proteção de dados conforme princípios da LGPD.
+
+## Segurança Implementada
+
+- autenticação JWT
+- hash de senha com Bcrypt
+- proteção de rotas privadas
+- controle de permissões por perfil
+- validação de token
+- não exposição de senhas em responses
+
+## Finalidade dos Dados Coletados
+
+Os dados dos usuários são utilizados para:
+
+- autenticação no sistema
+- processamento de pedidos
+- controle operacional
+- rastreabilidade das operações
+- gestão de pedidos multicanal
+
+---
+
 # Estrutura do Projeto
 
-```bash
+```txt
 src/
  ├── controllers/
  ├── docs/
@@ -232,43 +246,35 @@ src/
 
 ## Auth
 
-```http
+```txt
 POST /auth/register
 POST /auth/login
 ```
 
----
-
 ## Produtos
 
-```http
+```txt
 GET /produtos
 POST /produtos
 ```
 
----
-
 ## Unidades
 
-```http
+```txt
 GET /unidades
 POST /unidades
 ```
 
----
-
 ## Estoque
 
-```http
+```txt
 GET /estoque
 POST /estoque
 ```
 
----
-
 ## Pedidos
 
-```http
+```txt
 GET /pedidos
 POST /pedidos
 PATCH /pedidos/{id}/status
@@ -286,8 +292,6 @@ PATCH /pedidos/{id}/status
   "senha": "123456"
 }
 ```
-
----
 
 ## Criar Pedido
 
@@ -333,16 +337,7 @@ A API utiliza respostas padronizadas utilizando códigos HTTP apropriados:
 
 ---
 
-# Integrantes
-
-- Ygor Vasconcelos
-=======
-- Swagger
-- bcrypt
-
----
-
-## Funcionalidades
+# Funcionalidades Implementadas
 
 - Cadastro de usuários
 - Login com JWT
@@ -357,12 +352,10 @@ A API utiliza respostas padronizadas utilizando códigos HTTP apropriados:
 
 ---
 
-## Instalação
+# Fluxo Principal do MVP
 
-Clone o projeto:
+Fluxo implementado:
 
-```bash
-git clone https://github.com/Ygor-Vasconcelos/raizes-do-nordeste-api
-
-## Projeto multidisciplinar
->>>>>>> 9b9b29aeee1f5fe07e3706e00e709745e038def7
+```txt
+Pedido → Validação de Estoque → Pagamento Mock → Atualização de Status
+```
