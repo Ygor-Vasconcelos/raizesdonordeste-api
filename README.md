@@ -45,7 +45,7 @@ Antes de executar o projeto, é necessário possuir instalado:
 ```bash
 git clone https://github.com/Ygor-Vasconcelos/raizesdonordeste-api
 
-cd raizes-do-nordeste-api
+cd raizesdonordeste-api
 ```
 
 ---
