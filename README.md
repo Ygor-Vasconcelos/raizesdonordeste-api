@@ -119,7 +119,7 @@ http://localhost:3000/docs
 A coleção utilizada para validação dos endpoints encontra-se na pasta:
 
 ```txt
-postman/API-Raizes-do-Nordeste.postman_collection.json
+postman/postman_collection.json
 ```
 
 ---
