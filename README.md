@@ -2,25 +2,27 @@
 
 API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidades de uma rede de restaurantes multicanal.
 
+---
+
 ## Tecnologias Utilizadas
 
-- Node.js
-- Express
-- PostgreSQL
-- Prisma ORM
-- JWT
-- BcryptJS
-- Swagger/OpenAPI
-- Nodemon
+* Node.js v20.20.0
+* Express
+* PostgreSQL
+* Prisma ORM 6.19.3
+* JWT
+* BcryptJS
+* Swagger/OpenAPI
+* Nodemon
 
 ---
 
 ## Requisitos
 
-- Node.js v20+
-- PostgreSQL
-- Git
-- NPM
+* Node.js v20+
+* PostgreSQL
+* Git
+* NPM 10.8.2
 
 ---
 
@@ -52,22 +54,32 @@ raizes_nordeste
 
 Exemplo utilizando pgAdmin:
 
-- Databases
-- Create
-- Database
-- Nome: raizes_nordeste
-- Owner: postgres
+1. Databases
+2. Create
+3. Database
+4. Database Name: raizes_nordeste
+5. Owner: postgres
 
 ---
 
 ## Configuração do .env
 
-Criar arquivo `.env` na raiz do projeto:
+Criar um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/raizes_nordeste"
 
 JWT_SECRET="sua_chave_jwt"
+
+PORT=3000
+```
+
+Exemplo:
+
+```env
+DATABASE_URL="postgresql://postgres:123456@localhost:5432/raizes_nordeste"
+
+JWT_SECRET="raizes_nordeste_secret"
 
 PORT=3000
 ```
@@ -96,7 +108,7 @@ npx prisma generate
 npm run dev
 ```
 
-Servidor:
+Servidor disponível em:
 
 ```txt
 http://localhost:3000/docs/
@@ -116,11 +128,35 @@ http://localhost:3000/docs
 
 ## Coleção Postman
 
-A coleção utilizada para validação dos endpoints encontra-se na pasta:
+A coleção utilizada para validação dos endpoints encontra-se em:
 
 ```txt
-postman/postman_collection.json
+postman_collection.json
 ```
+
+---
+
+## Usuário Administrador
+
+Para fins acadêmicos e de avaliação do projeto, o sistema atribui automaticamente o perfil `ADMIN` ao usuário cadastrado com o e-mail:
+
+```txt
+admin@email.com
+```
+
+O primeiro usuário cadastrado com este e-mail receberá automaticamente o perfil ADMIN.
+
+Exemplo de cadastro:
+
+```json
+{
+  "nome": "Administrador",
+  "email": "admin@email.com",
+  "senha": "123456"
+}
+```
+
+Todos os demais usuários são cadastrados automaticamente com o perfil `CLIENTE`.
 
 ---
 
@@ -211,33 +247,88 @@ PATCH /pedidos/{id}/status
 
 ### ADMIN
 
-- Gerenciar produtos
-- Gerenciar unidades
-- Atualizar status de pedidos
+Pode:
+
+* Realizar login
+* Consultar produtos
+* Consultar unidades
+* Consultar pedidos
+* Criar pedidos
+* Consultar fidelidade
+* Cadastrar produtos
+* Cadastrar unidades
+* Gerenciar estoque
+* Atualizar status dos pedidos
 
 ### CLIENTE
 
-- Realizar pedidos
-- Consultar produtos
-- Consultar unidades
+Pode:
+
+* Cadastrar-se
+* Realizar login
+* Consultar produtos
+* Consultar unidades
+* Criar pedidos
+* Consultar pedidos
+* Consultar fidelidade
+
+Restrições:
+
+* Não pode atualizar status dos pedidos
+* Não pode gerenciar estoque
+* Não pode cadastrar produtos
+* Não pode cadastrar unidades
+
+---
+
+## Regras de Negócio
+
+* RN01: O sistema deve validar a existência de estoque antes da criação do pedido.
+* RN02: O sistema deve impedir pedidos com estoque insuficiente.
+* RN03: Apenas usuários ADMIN podem atualizar o status dos pedidos.
+* RN04: Apenas usuários ADMIN podem gerenciar estoque.
+* RN05: Apenas usuários ADMIN podem cadastrar produtos.
+* RN06: Apenas usuários ADMIN podem cadastrar unidades.
+* RN07: O sistema deve gerar token JWT após autenticação válida.
+* RN08: O sistema deve registrar clientes no programa de fidelidade com saldo inicial igual a zero.
 
 ---
 
 ## Segurança
 
-- Autenticação JWT
-- Hash de senha com Bcrypt
-- Controle de permissões por perfil
-- Proteção de rotas privadas
+* Autenticação JWT
+* Hash de senha com Bcrypt
+* Controle de permissões por perfil (ADMIN e CLIENTE)
+* Proteção de rotas privadas
+* Validação de token em endpoints protegidos
+
+---
+
+## Tratamento de Erros
+
+A API utiliza respostas padronizadas utilizando códigos HTTP apropriados:
+
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+* 409 Conflict
+* 500 Internal Server Error
+
+Exemplo de erro de permissão:
+
+```json
+{
+  "error": "SEM_PERMISSAO",
+  "message": "Você não possui permissão"
+}
+```
 
 ---
 
 ## Estrutura do Projeto
 
 ```txt
-Pedido → Validação de Estoque → Pagamento Mock → Atualização de Status
-```
-
 prisma/
 └── schema.prisma
 

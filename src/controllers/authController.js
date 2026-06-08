@@ -6,64 +6,70 @@ class AuthController {
 
   async register(req, res) {
 
-    try {
+  try {
 
-      const {
+    const {
+      nome,
+      email,
+      senha
+    } = req.body
+
+    const usuarioExiste = await prisma.usuario.findUnique({
+      where: {
+        email
+      }
+    })
+
+    if (usuarioExiste) {
+      return res.status(409).json({
+        error: 'USUARIO_EXISTE',
+        message: 'Usuário já cadastrado'
+      })
+    }
+
+    const senhaHash = await bcrypt.hash(senha, 10)
+
+    let role = 'CLIENTE'
+
+    if (email.toLowerCase() === 'admin@email.com') {
+      role = 'ADMIN'
+    }
+
+    const usuario = await prisma.usuario.create({
+      data: {
         nome,
         email,
-        senha
-      } = req.body
+        senha: senhaHash,
+        role,
 
-      const usuarioExiste = await prisma.usuario.findUnique({
-        where: {
-          email
+        fidelidade: {
+          create: {
+            pontos: 0
+          }
         }
-      })
-
-      if (usuarioExiste) {
-        return res.status(409).json({
-          error: 'USUARIO_EXISTE',
-          message: 'Usuário já cadastrado'
-        })
+      },
+      include: {
+        fidelidade: true
       }
+    })
 
-      const senhaHash = await bcrypt.hash(senha, 10)
+    return res.status(201).json({
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      role: usuario.role
+    })
 
-      const usuario = await prisma.usuario.create({
-        data: {
-         nome,
-         email,
-         senha: senhaHash,
-         role: 'CLIENTE',
+  } catch (error) {
 
-         fidelidade: {
-           create: {
-        pontos: 0
-      }
-    }
-  },
-  include: {
-    fidelidade: true
-  }
-})
-
-      return res.status(201).json({
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email,
-        role: usuario.role
-      })
-
-    } catch (error) {
-
-      return res.status(500).json({
-        error: 'ERRO_INTERNO',
-        message: error.message
-      })
-
-    }
+    return res.status(500).json({
+      error: 'ERRO_INTERNO',
+      message: error.message
+    })
 
   }
+
+}
 
   async login(req, res) {
 

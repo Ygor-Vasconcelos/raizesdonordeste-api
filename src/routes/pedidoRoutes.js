@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 const pedidoController = require('../controllers/pedidoController')
 const authMiddleware = require('../middlewares/authMiddleware')
+const roleMiddleware = require('../middlewares/roleMiddleware')
 
 /**
  * @swagger
@@ -133,6 +134,7 @@ router.post(
 router.patch(
   '/:id/status',
   authMiddleware,
+  roleMiddleware(['ADMIN']),
   pedidoController.updateStatus
 )
 
