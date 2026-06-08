@@ -7,21 +7,21 @@ API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidade
 ## Tecnologias Utilizadas
 
 * Node.js v20.20.0
-* Express
-* PostgreSQL
+* Express 5.2.1
+* PostgreSQL 18.4
 * Prisma ORM 6.19.3
-* JWT
-* BcryptJS
-* Swagger/OpenAPI
-* Nodemon
+* JWT 9.0.3
+* BcryptJS 3.0.3
+* Swagger/OpenAPI 5.0.1
+* Nodemon 3.1.14
 
 ---
 
 ## Requisitos
 
 * Node.js v20+
-* PostgreSQL
-* Git
+* PostgreSQL 18.4
+* Git 2.54.0
 * NPM 10.8.2
 
 ---
