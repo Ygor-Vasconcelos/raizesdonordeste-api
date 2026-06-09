@@ -14,6 +14,24 @@ class AuthController {
       senha
     } = req.body
 
+    // Validação de campos obrigatórios
+    if (!nome || !email || !senha) {
+      return res.status(400).json({
+        error: 'DADOS_OBRIGATORIOS',
+        message: 'Nome, email e senha são obrigatórios'
+      })
+    }
+
+    // Validação de formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        error: 'EMAIL_INVALIDO',
+        message: 'Informe um email válido'
+      })
+    }
+
     const usuarioExiste = await prisma.usuario.findUnique({
       where: {
         email

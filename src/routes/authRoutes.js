@@ -38,6 +38,10 @@ const router = express.Router()
  *         description: Usuário criado com sucesso
  *       400:
  *         description: Dados inválidos
+ *       409:
+ *         description: Usuário já cadastrado
+ *       500:
+ *         description: Erro interno do servidor
  */
 router.post('/register', authController.register)
 

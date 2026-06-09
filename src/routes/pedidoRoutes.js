@@ -87,6 +87,8 @@ router.get(
  *     responses:
  *       201:
  *         description: Pedido criado com sucesso
+ *       404:
+ *        description: Produto sem estoque
  */
 router.post(
   '/',
@@ -130,6 +132,8 @@ router.post(
  *     responses:
  *       200:
  *         description: Status atualizado com sucesso
+ *       403:
+ *         description: Sem permissão
  */
 router.patch(
   '/:id/status',

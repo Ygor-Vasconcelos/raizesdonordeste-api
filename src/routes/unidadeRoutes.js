@@ -2,6 +2,7 @@ const router = require('express').Router()
 
 const unidadeController = require('../controllers/unidadeController')
 const authMiddleware = require('../middlewares/authMiddleware')
+const roleMiddleware = require('../middlewares/roleMiddleware')
 
 /**
  * @swagger
@@ -43,10 +44,13 @@ router.get(
  *     responses:
  *       201:
  *         description: Unidade criada com sucesso
+ *       401:
+ *         description: Não autorizado
  */
 router.post(
   '/',
   authMiddleware,
+  roleMiddleware(['ADMIN']),
   unidadeController.create
 )
 

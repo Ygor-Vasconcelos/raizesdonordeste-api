@@ -54,6 +54,8 @@ router.get(
  *     responses:
  *       201:
  *         description: Produto criado
+ *       401:
+ *         description: Não autorizado
  */
 router.post(
   '/',
