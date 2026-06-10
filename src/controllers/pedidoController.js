@@ -13,7 +13,6 @@ class PedidoController {
         metodoPagamento
       } = req.body
 
-      // Valida se o canal do pedido foi informado
       if (!canalPedido) {
         return res.status(400).json({
           error: 'CANAL_OBRIGATORIO',
@@ -21,7 +20,6 @@ class PedidoController {
         })
       }
 
-      // Valida se o método de pagamento foi informado
       if (!metodoPagamento) {
         return res.status(400).json({
           error: 'METODO_PAGAMENTO_OBRIGATORIO',
@@ -29,7 +27,6 @@ class PedidoController {
         })
       }
 
-      // Valida se o pedido possui itens
       if (!itens || !Array.isArray(itens) || itens.length === 0) {
         return res.status(400).json({
           error: 'ITENS_OBRIGATORIOS',
@@ -37,26 +34,28 @@ class PedidoController {
         })
       }
 
-      // Validação da quantidade dos itens
       for (const item of itens) {
 
         if (!item.quantidade || item.quantidade <= 0) {
-
           return res.status(400).json({
             error: 'QUANTIDADE_INVALIDA',
             message: 'Quantidade deve ser maior que zero'
           })
-
         }
 
       }
 
-      // Recupera o usuário autenticado através do JWT
       const usuarioId = req.user.id
 
       let total = 0
+      let descontoAplicado = 0
 
-      // Valida estoque disponível para todos os itens
+      const fidelidade = await prisma.fidelidade.findUnique({
+        where: {
+          usuarioId
+        }
+      })
+
       for (const item of itens) {
 
         const estoque = await prisma.estoque.findFirst({
@@ -66,7 +65,6 @@ class PedidoController {
           }
         })
 
-        // Verifica se o produto existe no estoque
         if (!estoque) {
           return res.status(404).json({
             error: 'ESTOQUE_NAO_ENCONTRADO',
@@ -74,23 +72,15 @@ class PedidoController {
           })
         }
 
-        // Verifica quantidade disponível
         if (estoque.quantidade < item.quantidade) {
           return res.status(409).json({
             error: 'ESTOQUE_INSUFICIENTE',
-            message: 'Não há quantidade suficiente para um ou mais itens.',
-            details: [
-              {
-                field: 'itens.quantidade',
-                issue: `Disponível: ${estoque.quantidade}`
-              }
-            ]
+            message: 'Não há quantidade suficiente para um ou mais itens.'
           })
         }
 
       }
 
-      // Calcula valor total do pedido e decrementa estoque
       for (const item of itens) {
 
         const produto = await prisma.produto.findUnique({
@@ -99,7 +89,6 @@ class PedidoController {
           }
         })
 
-        // Verifica se o produto existe
         if (!produto) {
           return res.status(404).json({
             error: 'PRODUTO_NAO_ENCONTRADO',
@@ -107,10 +96,8 @@ class PedidoController {
           })
         }
 
-        // Soma valor total do pedido
         total += produto.preco * item.quantidade
 
-        // Atualiza estoque após confirmação do item
         await prisma.estoque.updateMany({
           where: {
             unidadeId,
@@ -125,50 +112,86 @@ class PedidoController {
 
       }
 
-      // Criação do pedido e seus itens
-    const pedido = await prisma.pedido.create({
-  data: {
-    usuarioId,
-    unidadeId,
-    canalPedido,
-    total,
-    itens: {
-      create: await Promise.all(
-        itens.map(async item => {
+      if (fidelidade?.descontoAtivo) {
 
-          const produto = await prisma.produto.findUnique({
+        descontoAplicado = total * 0.30
+
+        total = total - descontoAplicado
+
+        await prisma.fidelidade.update({
+          where: {
+            usuarioId
+          },
+          data: {
+            descontoAtivo: false,
+            pontos: 0
+          }
+        })
+
+      }
+
+      const pedido = await prisma.pedido.create({
+        data: {
+          usuarioId,
+          unidadeId,
+          canalPedido,
+          total,
+          itens: {
+            create: await Promise.all(
+              itens.map(async (item) => {
+
+                const produto = await prisma.produto.findUnique({
+                  where: {
+                    id: item.produtoId
+                  }
+                })
+
+                return {
+                  produtoId: item.produtoId,
+                  quantidade: item.quantidade,
+                  precoUnit: produto.preco
+                }
+
+              })
+            )
+          }
+        },
+        include: {
+          itens: true
+        }
+      })
+
+      if (fidelidade) {
+
+        const fidelidadeAtualizada = await prisma.fidelidade.update({
+          where: {
+            usuarioId
+          },
+          data: {
+            pontos: {
+              increment: 10
+            }
+          }
+        })
+
+        if (
+          fidelidadeAtualizada.pontos >= 30 &&
+          !fidelidadeAtualizada.descontoAtivo
+        ) {
+
+          await prisma.fidelidade.update({
             where: {
-              id: item.produtoId
+              usuarioId
+            },
+            data: {
+              descontoAtivo: true
             }
           })
 
-          return {
-            produtoId: item.produtoId,
-            quantidade: item.quantidade,
-            precoUnit: produto.preco
-          }
+        }
 
-        })
-      )
-    }
-  },
-  include: {
-    itens: true
-  }
-})
+      }
 
-await prisma.fidelidade.update({
-  where: {
-    usuarioId
-  },
-
-  data: {
-    pontos: {
-      increment: 10
-    }
-  }
-})
-      // Simulação de integração com gateway de pagamento
       const pagamentoAprovado = Math.random() > 0.3
 
       const pagamento = await prisma.pagamento.create({
@@ -181,12 +204,10 @@ await prisma.fidelidade.update({
         }
       })
 
-      // Define status do pedido conforme resultado do pagamento
       const novoStatus = pagamentoAprovado
         ? 'PAGO'
         : 'CANCELADO'
 
-      // Atualiza status do pedido
       await prisma.pedido.update({
         where: {
           id: pedido.id
@@ -196,7 +217,6 @@ await prisma.fidelidade.update({
         }
       })
 
-      // Registra evento no log de auditoria
       await prisma.logAuditoria.create({
         data: {
           acao: `Pedido ${novoStatus}`,
@@ -208,10 +228,13 @@ await prisma.fidelidade.update({
         pedidoId: pedido.id,
         status: novoStatus,
         pagamento,
+        descontoAplicado,
         total
       })
 
     } catch (error) {
+
+      console.error(error)
 
       return res.status(500).json({
         error: 'ERRO_INTERNO',
@@ -229,7 +252,6 @@ await prisma.fidelidade.update({
       const { id } = req.params
       const { status } = req.body
 
-      // Lista de status permitidos
       const statusValidos = [
         'AGUARDANDO_PAGAMENTO',
         'PAGO',
@@ -239,7 +261,6 @@ await prisma.fidelidade.update({
         'CANCELADO'
       ]
 
-      // Valida se o status informado é válido
       if (!statusValidos.includes(status)) {
         return res.status(400).json({
           error: 'STATUS_INVALIDO',
@@ -247,7 +268,6 @@ await prisma.fidelidade.update({
         })
       }
 
-      // Verifica se o pedido existe
       const pedidoExiste = await prisma.pedido.findUnique({
         where: {
           id: Number(id)
@@ -261,7 +281,6 @@ await prisma.fidelidade.update({
         })
       }
 
-      // Atualiza status do pedido
       const pedidoAtualizado = await prisma.pedido.update({
         where: {
           id: Number(id)
@@ -271,7 +290,6 @@ await prisma.fidelidade.update({
         }
       })
 
-      // Registra alteração no log de auditoria
       await prisma.logAuditoria.create({
         data: {
           acao: `Pedido atualizado para ${status}`,
@@ -298,12 +316,9 @@ await prisma.fidelidade.update({
 
       const { canalPedido } = req.query
 
-      // Permite filtrar pedidos por canal
       const pedidos = await prisma.pedido.findMany({
         where: canalPedido
-          ? {
-              canalPedido
-            }
+          ? { canalPedido }
           : {},
         include: {
           itens: true,

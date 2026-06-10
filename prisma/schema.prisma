@@ -113,10 +113,11 @@ model Pagamento {
 }
 
 model Fidelidade {
-  id        Int @id @default(autoincrement())
-  pontos    Int @default(0)
+  id              Int @id @default(autoincrement())
+  pontos          Int @default(0)
+  descontoAtivo   Boolean @default(false)
 
-  usuarioId Int @unique
+  usuarioId       Int @unique
 
   usuario Usuario @relation(fields: [usuarioId], references: [id])
 }

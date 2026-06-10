@@ -2,17 +2,41 @@ const prisma = require('../prisma/prismaClient')
 
 class EstoqueController {
 
-  async create(req, res) {
+ async create(req, res) {
 
-    try {
+  try {
 
-      const {
+    const {
+      unidadeId,
+      produtoId,
+      quantidade
+    } = req.body
+
+    const estoqueExistente = await prisma.estoque.findFirst({
+      where: {
         unidadeId,
-        produtoId,
-        quantidade
-      } = req.body
+        produtoId
+      }
+    })
 
-      const estoque = await prisma.estoque.create({
+    let estoque
+
+    if (estoqueExistente) {
+
+      estoque = await prisma.estoque.update({
+        where: {
+          id: estoqueExistente.id
+        },
+        data: {
+          quantidade: {
+            increment: quantidade
+          }
+        }
+      })
+
+    } else {
+
+      estoque = await prisma.estoque.create({
         data: {
           unidadeId,
           produtoId,
@@ -20,18 +44,20 @@ class EstoqueController {
         }
       })
 
-      return res.status(201).json(estoque)
-
-    } catch (error) {
-
-      return res.status(500).json({
-        error: 'ERRO_INTERNO',
-        message: error.message
-      })
-
     }
 
+    return res.status(201).json(estoque)
+
+  } catch (error) {
+
+    return res.status(500).json({
+      error: 'ERRO_INTERNO',
+      message: error.message
+    })
+
   }
+
+}
 
   async findAll(req, res) {
 

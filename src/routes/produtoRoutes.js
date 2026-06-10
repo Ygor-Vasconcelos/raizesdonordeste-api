@@ -54,8 +54,14 @@ router.get(
  *     responses:
  *       201:
  *         description: Produto criado
+ *       400:
+ *         description: Inválido
  *       401:
+ *         description: Sem token de autenticação
+ *       403:
  *         description: Não autorizado
+ *       500:
+ *         description: Erro interno
  */
 router.post(
   '/',

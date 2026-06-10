@@ -87,8 +87,14 @@ router.get(
  *     responses:
  *       201:
  *         description: Pedido criado com sucesso
+ *       400:
+ *         description: Inválido
+ *       401:
+ *         description: Token não informado
  *       404:
- *        description: Produto sem estoque
+ *         description: Estoque não encontrado
+ *       409:
+ *         description: Estoque insuficiente
  */
 router.post(
   '/',

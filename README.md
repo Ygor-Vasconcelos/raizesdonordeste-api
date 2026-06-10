@@ -1,6 +1,6 @@
 # API Raízes do Nordeste
 
-API REST desenvolvida para gerenciamento de pedidos, estoque, produtos e unidades de uma rede de restaurantes multicanal.
+API REST desenvolvida para gerenciamento de pedidos, estoque, produtos, unidades e programa de fidelidade de uma rede de restaurantes multicanal.
 
 ---
 
@@ -111,7 +111,7 @@ npm run dev
 Servidor disponível em:
 
 ```txt
-http://localhost:3000/docs/
+http://localhost:3000/docs
 ```
 
 ---
@@ -144,9 +144,7 @@ Para fins acadêmicos e de avaliação do projeto, o sistema atribui automaticam
 admin@email.com
 ```
 
-O primeiro usuário cadastrado com este e-mail receberá automaticamente o perfil ADMIN.
-
-Exemplo de cadastro:
+Exemplo:
 
 ```json
 {
@@ -156,7 +154,7 @@ Exemplo de cadastro:
 }
 ```
 
-Todos os demais usuários são cadastrados automaticamente com o perfil `CLIENTE`.
+Todos os demais usuários recebem automaticamente o perfil `CLIENTE`.
 
 ---
 
@@ -167,9 +165,49 @@ Pedido
  ↓
 Validação de Estoque
  ↓
+Aplicação de Desconto Fidelidade (quando disponível)
+ ↓
 Pagamento Mock
  ↓
 Atualização de Status
+ ↓
+Acúmulo de Pontos
+```
+
+---
+
+## Programa de Fidelidade
+
+O sistema possui um programa de fidelidade integrado ao processo de pedidos.
+
+### Funcionamento
+
+* Todo usuário cadastrado recebe automaticamente um registro de fidelidade.
+* Cada pedido realizado gera 10 pontos.
+* Ao atingir 30 pontos, um desconto é liberado para o próximo pedido.
+* O desconto corresponde a 30% sobre o valor total do pedido.
+* Após utilizar o desconto:
+
+  * os pontos são zerados;
+  * o desconto é removido;
+  * inicia-se um novo ciclo de pontuação.
+
+### Exemplo
+
+```txt
+Pedido 1 → +10 pontos
+Pedido 2 → +10 pontos
+Pedido 3 → +10 pontos
+
+Total = 30 pontos
+↓
+Desconto liberado
+
+Próximo pedido
+↓
+30% de desconto aplicado
+↓
+Pontos resetados para 0
 ```
 
 ---
@@ -210,6 +248,12 @@ POST /estoque
 GET /pedidos
 POST /pedidos
 PATCH /pedidos/{id}/status
+```
+
+### Fidelidade
+
+```txt
+GET /fidelidade/{usuarioId}
 ```
 
 ---
@@ -291,6 +335,14 @@ Restrições:
 * RN06: Apenas usuários ADMIN podem cadastrar unidades.
 * RN07: O sistema deve gerar token JWT após autenticação válida.
 * RN08: O sistema deve registrar clientes no programa de fidelidade com saldo inicial igual a zero.
+* RN09: O sistema deve adicionar 10 pontos ao cliente a cada pedido realizado.
+* RN10: O sistema deve liberar automaticamente um desconto quando o cliente atingir 30 pontos.
+* RN11: O desconto concedido deve corresponder a 30% do valor total do pedido.
+* RN12: O desconto deve ser aplicado apenas uma vez.
+* RN13: Após utilizar o desconto, os pontos devem ser zerados.
+* RN14: O sistema deve reiniciar automaticamente o ciclo de fidelidade após o uso do benefício.
+* RN15: O pagamento do pedido deve ser processado por um gateway mock para fins acadêmicos.
+* RN16: Pedidos com pagamento recusado devem ser automaticamente cancelados.
 
 ---
 
@@ -315,7 +367,7 @@ A API utiliza respostas padronizadas utilizando códigos HTTP apropriados:
 * 409 Conflict
 * 500 Internal Server Error
 
-Exemplo de erro de permissão:
+Exemplo:
 
 ```json
 {
@@ -339,5 +391,4 @@ src/
 ├── prisma/
 ├── routes/
 ├── server.js
-
 ```

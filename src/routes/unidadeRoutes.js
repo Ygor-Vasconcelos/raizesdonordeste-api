@@ -44,7 +44,11 @@ router.get(
  *     responses:
  *       201:
  *         description: Unidade criada com sucesso
- *       401:
+ *       400:
+ *         description: Inválido
+*       401:
+ *         description: Token não informado
+ *       403:
  *         description: Não autorizado
  */
 router.post(
