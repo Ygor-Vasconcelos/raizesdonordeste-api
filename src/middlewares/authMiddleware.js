@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 
-// Middleware responsável por validar autenticação JWT
+// Middleware para validar o token JWT
 function authMiddleware(req, res, next) {
 
   try {
 
-    // Recupera o header Authorization da requisição
+    // Pega o Authorization enviado na requisição
     const authHeader = req.headers.authorization
 
     // Verifica se o token foi enviado
@@ -16,10 +16,10 @@ function authMiddleware(req, res, next) {
       })
     }
 
-    // Extrai apenas o token do formato: Bearer TOKEN
+    // Separa o token do Bearer
     const token = authHeader.split(' ')[1]
 
-    // Verifica se o token é válido
+    // Verifica se o token existe
     if (!token) {
       return res.status(401).json({
         error: 'TOKEN_INVALIDO',
@@ -27,21 +27,21 @@ function authMiddleware(req, res, next) {
       })
     }
 
-    // Decodifica e valida o JWT utilizando a chave secreta
+    // Valida o token usando a chave JWT
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET
     )
 
-    // Armazena os dados do usuário autenticado na requisição
+    // Salva os dados do usuário autenticado
     req.user = decoded
 
-    // Libera acesso para a próxima função
+    // Continua para a próxima rota
     next()
 
   } catch (error) {
 
-    // Retorna erro caso o token seja inválido ou expirado
+    // Token inválido ou expirado
     return res.status(401).json({
       error: 'TOKEN_INVALIDO',
       message: error.message

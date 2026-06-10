@@ -13,6 +13,7 @@ class PedidoController {
         metodoPagamento
       } = req.body
 
+      // Verifica se o canal do pedido foi informado
       if (!canalPedido) {
         return res.status(400).json({
           error: 'CANAL_OBRIGATORIO',
@@ -20,6 +21,7 @@ class PedidoController {
         })
       }
 
+      // Verifica se o método de pagamento foi informado
       if (!metodoPagamento) {
         return res.status(400).json({
           error: 'METODO_PAGAMENTO_OBRIGATORIO',
@@ -27,6 +29,7 @@ class PedidoController {
         })
       }
 
+      // Verifica se existe pelo menos um item no pedido
       if (!itens || !Array.isArray(itens) || itens.length === 0) {
         return res.status(400).json({
           error: 'ITENS_OBRIGATORIOS',
@@ -34,6 +37,7 @@ class PedidoController {
         })
       }
 
+      // Verifica se todas as quantidades são válidas
       for (const item of itens) {
 
         if (!item.quantidade || item.quantidade <= 0) {
@@ -50,12 +54,14 @@ class PedidoController {
       let total = 0
       let descontoAplicado = 0
 
+      // Busca os dados de fidelidade do usuário
       const fidelidade = await prisma.fidelidade.findUnique({
         where: {
           usuarioId
         }
       })
 
+      // Verifica se existe estoque suficiente para todos os itens
       for (const item of itens) {
 
         const estoque = await prisma.estoque.findFirst({
@@ -81,6 +87,7 @@ class PedidoController {
 
       }
 
+      // Calcula o valor total e baixa os itens do estoque
       for (const item of itens) {
 
         const produto = await prisma.produto.findUnique({
@@ -112,12 +119,14 @@ class PedidoController {
 
       }
 
+      // Aplica desconto caso o usuário tenha benefício disponível
       if (fidelidade?.descontoAtivo) {
 
         descontoAplicado = total * 0.30
 
         total = total - descontoAplicado
 
+        // Após utilizar o desconto, os pontos são zerados
         await prisma.fidelidade.update({
           where: {
             usuarioId
@@ -130,6 +139,7 @@ class PedidoController {
 
       }
 
+      // Cria o pedido e seus itens
       const pedido = await prisma.pedido.create({
         data: {
           usuarioId,
@@ -161,6 +171,7 @@ class PedidoController {
         }
       })
 
+      // Adiciona pontos ao programa de fidelidade
       if (fidelidade) {
 
         const fidelidadeAtualizada = await prisma.fidelidade.update({
@@ -174,6 +185,7 @@ class PedidoController {
           }
         })
 
+        // Libera desconto quando atingir 30 pontos
         if (
           fidelidadeAtualizada.pontos >= 30 &&
           !fidelidadeAtualizada.descontoAtivo
@@ -192,6 +204,7 @@ class PedidoController {
 
       }
 
+      // Simulação simples de aprovação de pagamento
       const pagamentoAprovado = Math.random() > 0.3
 
       const pagamento = await prisma.pagamento.create({
@@ -204,6 +217,7 @@ class PedidoController {
         }
       })
 
+      // Define o status do pedido baseado no pagamento
       const novoStatus = pagamentoAprovado
         ? 'PAGO'
         : 'CANCELADO'
@@ -217,6 +231,7 @@ class PedidoController {
         }
       })
 
+      // Registra ação no log de auditoria
       await prisma.logAuditoria.create({
         data: {
           acao: `Pedido ${novoStatus}`,
@@ -252,6 +267,7 @@ class PedidoController {
       const { id } = req.params
       const { status } = req.body
 
+      // Lista de status permitidos
       const statusValidos = [
         'AGUARDANDO_PAGAMENTO',
         'PAGO',
@@ -268,6 +284,7 @@ class PedidoController {
         })
       }
 
+      // Verifica se o pedido existe
       const pedidoExiste = await prisma.pedido.findUnique({
         where: {
           id: Number(id)
@@ -281,6 +298,7 @@ class PedidoController {
         })
       }
 
+      // Atualiza o status do pedido
       const pedidoAtualizado = await prisma.pedido.update({
         where: {
           id: Number(id)
@@ -290,6 +308,7 @@ class PedidoController {
         }
       })
 
+      // Salva alteração no log
       await prisma.logAuditoria.create({
         data: {
           acao: `Pedido atualizado para ${status}`,
@@ -316,6 +335,7 @@ class PedidoController {
 
       const { canalPedido } = req.query
 
+      // Busca todos os pedidos ou filtra por canal
       const pedidos = await prisma.pedido.findMany({
         where: canalPedido
           ? { canalPedido }

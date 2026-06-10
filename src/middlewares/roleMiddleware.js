@@ -1,12 +1,12 @@
- // Middleware responsável pelo controle de acesso por perfil
+// Middleware para controlar acesso por perfil
 function roleMiddleware(rolesPermitidas = []) {
 
   return (req, res, next) => {
 
-    // Recupera o perfil do usuário autenticado
+    // Perfil do usuário autenticado
     const userRole = req.user.role
 
-    // Verifica se o perfil possui permissão para acessar a rota
+    // Verifica se o usuário tem permissão
     if (!rolesPermitidas.includes(userRole)) {
       return res.status(403).json({
         error: 'SEM_PERMISSAO',
@@ -14,7 +14,7 @@ function roleMiddleware(rolesPermitidas = []) {
       })
     }
 
-    // Libera acesso caso o perfil seja permitido
+    // Permissão concedida
     next()
 
   }
